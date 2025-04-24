@@ -4,7 +4,7 @@ import zentralLogo from './assets/zentral-logo.png'
 import {TimeDashboard} from './pages/TimeDashboard'
 import {HomePage} from './pages/HomePage'
 
-import './App.css'
+import './assets/styles/main.scss'
 
 function App() {
   return (

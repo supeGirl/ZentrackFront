@@ -5,7 +5,14 @@ export const utilService = {
   debounce,
   getAssetSrc,
   formatTime,
-  formatDuration
+  formatDuration,
+  getLiveClockUpdater
+}
+
+function getLiveClockUpdater(setTimeCb) {
+  return setInterval(() => {
+    setTimeCb((prevTime) => new Date(prevTime.getTime() + 1000))
+  }, 1000)
 }
 
 function formatTime(timestamp) {

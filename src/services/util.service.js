@@ -4,6 +4,19 @@ export const utilService = {
   animateCSS,
   debounce,
   getAssetSrc,
+  formatTime,
+  formatDuration
+}
+
+function formatTime(timestamp) {
+  const date = new Date(timestamp)
+  return date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', second: '2-digit'})
+}
+
+function formatDuration(seconds) {
+  const minutes = Math.floor(seconds / 60)
+  const secs = seconds % 60
+  return `${minutes} min ${secs < 10 ? '0' : ''}${secs} sec`
 }
 
 function makeId(length = 6) {

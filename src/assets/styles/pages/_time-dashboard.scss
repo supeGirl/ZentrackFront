@@ -1,0 +1,109 @@
+.user-info-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: $spacing-md;
+  background-color: $bg-color;
+  border-radius: $border-radius-md;
+  border: 1px solid $border-color;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-avater-container {
+  position: relative;
+  justify-items: center;
+
+  .user-avater {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    padding: $spacing-xs;
+  }
+}
+
+.welcoming-container {
+  font-family: $font-base;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-normal;
+  color: $text-color;
+}
+
+.user-stats {
+  display: flex;
+  gap: $spacing-xl;
+
+  .user-stats .missing,
+  .user-stats .total-time,
+  .user-stats .deficiencies {
+    font-family: $font-base;
+    font-size: $font-size-sm;
+    color: $text-color;
+  }
+}
+
+.user-actions-container {
+  margin-top: $spacing-lg;
+}
+
+.user-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-md;
+  border-radius: $border-radius-md;
+}
+
+.time-container {
+  flex: 1;
+}
+
+.actions-btns {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.in-action,
+.out-action {
+  padding: $spacing-sm $spacing-md;
+  font-family: $font-base;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-md;
+  border-radius: $border-radius-sm;
+  border: none;
+  cursor: pointer;
+  transition: $transition-fast;
+
+  &.in-action {
+    background-color: $color-success;
+    color: $color-lightest;
+    padding: $spacing-sm $spacing-ml;
+  }
+
+  &.out-action {
+    background-color: $color-danger;
+    color: $color-lightest;
+  }
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+.footer {
+  margin-top: $spacing-lg;
+  padding: $spacing-md;
+  border-radius: $border-radius-md;
+}
+.interval-section {
+  display: flex;
+  justify-content: center;
+}
+
+.time-interval {
+  font-family: $font-base;
+  font-size: $font-size-sm;
+  color: $text-color;
+  font-weight: $font-weight-normal;
+  text-align: center;
+}

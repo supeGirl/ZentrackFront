@@ -1,9 +1,12 @@
 import { legacy_createStore as createStore, combineReducers } from 'redux'
 import { shiftsReducer } from './shifts/shiftsReducer'
+import { userReducer } from './user/user.reducer';
 
 
 const rootReducer = combineReducers({
   shifts: shiftsReducer, 
+  userModule: userReducer,
+
 })
 
 export const action = (type, payload) => ({

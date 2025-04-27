@@ -1,23 +1,23 @@
 import {Avatar} from '@mui/material'
 import {ZentrackClock} from '../cmps/zentreckClock'
 import {useRef, useState, useEffect} from 'react'
-import {utilService} from '../services/util.service'
 import {setEndTime, setStartTime} from '../store/shifts/shifts.action'
-import {useDispatch} from 'react-redux'
-import {useAppSelector} from '../store/hooks'
+import {useDispatch, useSelector} from 'react-redux'
 import {shiftsService} from '../services/shifts'
 import {ShiftsList} from '../cmps/ShiftsList'
+import {logout} from '../store/user/user.actions'
+import {useNavigate} from 'react-router'
 
 export function TimeDashboard() {
   const [secondsPassed, setSecondsPassed] = useState(0)
   const [isCounting, setIsCounting] = useState(false)
   const intervalRef = useRef(null)
   const dispatch = useDispatch()
-  const shiftsState = useAppSelector((state) => state.shifts)
-  const user = {
-    id: 'usertest',
-    name: 'user userly',
-  }
+  const shiftsState = useSelector((state) => state.shifts)
+  const user = useSelector((state) => state.userModule.user)
+  const navigate = useNavigate()
+
+  console.log(user, 'user')
 
   useEffect(() => {
     console.log(shiftsState.currentShift)
@@ -43,20 +43,28 @@ export function TimeDashboard() {
     //   clearInterval(intervalRef.current)
     //   setIsCounting(false)
     // }
+
     const time = await shiftsService.loadTime()
     dispatch(setEndTime(time))
   }
-
+  function onLogout() {
+    logout()
+    navigate('/')
+  }
+  if (!user) return <h1>Loadingg</h1>
   return (
     <>
       <header className="user-info-container">
+        <button onClick={onLogout} className="logout-btn">
+          Logout
+        </button>
         <div className="user-avater-container">
           <span className="user-avater">
             <Avatar src="/broken-image.jpg" />
           </span>
         </div>
 
-        <div className="welcoming-container">{`hello ${user.name}`}</div>
+        <div className="welcoming-container">{`hello ${user.fullname}`}</div>
 
         <section className="user-stats">
           <div className="deficiencies">Deficiencies 0</div>

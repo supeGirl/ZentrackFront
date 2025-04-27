@@ -1,5 +1,11 @@
 export const shiftsService = {
   loadTime,
+  saveShift
+}
+
+let user = {
+  id: 'usertest',
+  name: 'user userly',
 }
 
 async function loadTime() {
@@ -14,4 +20,14 @@ async function loadTime() {
     console.error('getBerlinTime failed', err)
     throw err
   }
+}
+
+async function saveShift(newShift) {
+  console.log('newShigt', newShift)
+  
+  return (userShift = {
+    userId: user.id,
+    userName: user.name,
+    shift: newShift,
+  })
 }

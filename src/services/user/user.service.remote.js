@@ -13,12 +13,16 @@ export const userService = {
   update,
 }
 
-function query() {
-  return httpService.get('user')
+async function query() {
+  const user = await httpService.get(`user`)
+  console.log('user from q', user)
+  
+  return user
 }
 
 async function getById(userId) {
   const user = await httpService.get(`user/${userId}`)
+  
   return user
 }
 

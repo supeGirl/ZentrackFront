@@ -24,11 +24,13 @@ export function shiftsReducer(state = initialState, action) {
       return {...state, currentShift: {...currentShift, startTime: action.payload}}
     case SET_END_TIME:
       const newShift = shiftsService.createShift(currentShift.startTime, action.payload)
-
+      // const savedShift = shiftsService.saveShift(newShift)
+      
       return {
         ...state,
         all: [...state.all, newShift],
         currentShift: {
+          user:savedShift.userName,
           startTime:{},
           endTime:{},
         },

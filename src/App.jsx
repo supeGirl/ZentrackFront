@@ -1,11 +1,11 @@
 import {Routes, Route} from 'react-router'
 import {Provider} from 'react-redux'
-import zentralLogo from './assets/zentral-logo.png'
 import {TimeDashboard} from './pages/TimeDashboard'
 import {HomePage} from './pages/HomePage'
+import {LoginPage} from './pages/LoginPage'
 
 import './assets/styles/main.scss'
-import { store } from './store/store'
+import {store} from './store/store'
 
 function App() {
   return (
@@ -15,6 +15,7 @@ function App() {
           <Routes>
             <Route element={<HomePage />} path="" />
             <Route element={<TimeDashboard />} path="/timedashboard" />
+            <Route element={<LoginPage />} path="/login" />
           </Routes>
         </main>
       </div>

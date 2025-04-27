@@ -1,32 +1,50 @@
 import {Avatar} from '@mui/material'
 import {ZentrackClock} from '../cmps/zentreckClock'
 import {useRef, useState, useEffect} from 'react'
-import { utilService } from '../services/util.service'
+import {utilService} from '../services/util.service'
+import {setEndTime, setStartTime} from '../store/shifts/shifts.action'
+import {useDispatch} from 'react-redux'
+import {useAppSelector} from '../store/hooks'
+import {shiftsService} from '../services/shifts'
+import {ShiftsList} from '../cmps/ShiftsList'
 
 export function TimeDashboard() {
   const [secondsPassed, setSecondsPassed] = useState(0)
   const [isCounting, setIsCounting] = useState(false)
   const intervalRef = useRef(null)
-
-  useEffect(() => {
-    return () => clearInterval(intervalRef.current)
-  }, [])
-
-  function startTimer() {
-    if (!isCounting) {
-      setSecondsPassed(0)
-      setIsCounting(true)
-      intervalRef.current = setInterval(() => {
-        setSecondsPassed((prev) => prev + 1)
-      }, 1000)
-    }
+  const dispatch = useDispatch()
+  const shiftsState = useAppSelector((state) => state.shifts)
+  const user = {
+    id: 'usertest',
+    name: 'user userly',
   }
 
-  function stopTimer() {
-    if (isCounting) {
-      clearInterval(intervalRef.current)
-      setIsCounting(false)
-    }
+  useEffect(() => {
+    console.log(shiftsState.currentShift)
+
+    // return () => clearInterval(intervalRef.current)
+  }, [shiftsState.all])
+
+  async function startTimer() {
+    // if (!isCounting) {
+    //   setSecondsPassed(0)
+    //   setIsCounting(true)
+    //   intervalRef.current = setInterval(() => {
+    //     setSecondsPassed((prev) => prev + 1)
+    //   }, 1000)
+    // }
+    const time = await shiftsService.loadTime()
+
+    dispatch(setStartTime(time))
+  }
+
+  async function stopTimer() {
+    // if (isCounting) {
+    //   clearInterval(intervalRef.current)
+    //   setIsCounting(false)
+    // }
+    const time = await shiftsService.loadTime()
+    dispatch(setEndTime(time))
   }
 
   return (
@@ -38,7 +56,7 @@ export function TimeDashboard() {
           </span>
         </div>
 
-        <div className="welcoming-container">Hello User!!</div>
+        <div className="welcoming-container">{`hello ${user.name}`}</div>
 
         <section className="user-stats">
           <div className="deficiencies">Deficiencies 0</div>
@@ -49,29 +67,39 @@ export function TimeDashboard() {
 
       <main className="user-actions-container">
         <section className="user-actions">
-          <div className="time-container">
-            <ZentrackClock />
-          </div>
+          <div className="time-container">{/* <ZentrackClock /> */}</div>
 
           <div className="actions-btns">
-            <button className="in-action" onClick={startTimer}>
+            <button
+              className="in-action-btn "
+              onClick={startTimer}
+              disabled={Object.keys(shiftsState.currentShift.startTime).length}
+            >
               In
             </button>
-            <button className="out-action" onClick={stopTimer}>
+            <button
+              className="out-action-btn"
+              onClick={stopTimer}
+              disabled={!Object.keys(shiftsState.currentShift.startTime).length}
+            >
               Out
             </button>
           </div>
         </section>
+
+        <section className="user-shifts-list-container">
+          <ShiftsList shifts={shiftsState.all} />
+        </section>
       </main>
 
-      <footer className="footer">
+      {/* <footer className="footer">
         <section className="interval-section">
           <div className="time-interval">
             {isCounting && <p>Working... {utilService.formatDuration(secondsPassed)}</p>}
             {!isCounting && secondsPassed > 0 && <p>You worked {utilService.formatDuration(secondsPassed)}</p>}
           </div>
         </section>
-      </footer>
+      </footer> */}
     </>
   )
 }

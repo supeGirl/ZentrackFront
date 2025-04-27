@@ -64,8 +64,8 @@
   gap: $spacing-sm;
 }
 
-.in-action,
-.out-action {
+.in-action-btn,
+.out-action-btn {
   padding: $spacing-sm $spacing-md;
   font-family: $font-base;
   font-weight: $font-weight-bold;
@@ -75,20 +75,30 @@
   cursor: pointer;
   transition: $transition-fast;
 
-  &.in-action {
+  &.in-action-btn {
     background-color: $color-success;
     color: $color-lightest;
     padding: $spacing-sm $spacing-ml;
+    &:disabled{
+      cursor: not-allowed;
+      opacity: 50%;
+    }
   }
 
-  &.out-action {
+  &.out-action-btn {
     background-color: $color-danger;
     color: $color-lightest;
+    &:disabled{
+      cursor: not-allowed;
+      opacity: 50%;
+    }
   }
 
   &:hover {
     opacity: 0.9;
   }
+
+ 
 }
 .footer {
   margin-top: $spacing-lg;

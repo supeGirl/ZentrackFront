@@ -1,25 +1,22 @@
-import {Routes, Route} from 'react-router'
-import {Provider} from 'react-redux'
-import {TimeDashboard} from './pages/TimeDashboard'
-import {HomePage} from './pages/HomePage'
-import {LoginPage} from './pages/LoginPage'
-
+import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
 import './assets/styles/main.scss'
-import {store} from './store/store'
+import AppRouting from './routes'
+import { loadUserFromSession } from './store/user/user.actions'
 
 function App() {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(loadUserFromSession())
+  }, [])
+
   return (
-    <Provider store={store}>
-      <div className="main-layout-container">
-        <main>
-          <Routes>
-            <Route element={<HomePage />} path="" />
-            <Route element={<TimeDashboard />} path="/timedashboard" />
-            <Route element={<LoginPage />} path="/login" />
-          </Routes>
-        </main>
-      </div>
-    </Provider>
+    <div className="main-layout-container">
+      <main>
+        <AppRouting />
+      </main>
+    </div>
   )
 }
 

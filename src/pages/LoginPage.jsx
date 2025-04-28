@@ -3,13 +3,14 @@ import {useNavigate} from 'react-router'
 
 import {ImgUploader} from '../cmps/ImgUploader'
 import {userService} from '../services/user'
-import { login, signup } from '../store/user/user.actions'
-
+import {logInRequest, logOutRequest} from '../store/user/user.actions'
+import {useDispatch} from 'react-redux'
 
 export function LoginPage() {
   const [credentials, setCredentials] = useState(userService.getEmptyUser())
   const [isSignup, setIsSignup] = useState(false)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   function clearState() {
     setCredentials({username: '', password: '', fullname: '', imgUrl: ''})
@@ -23,19 +24,18 @@ export function LoginPage() {
 
   async function handleSubmit(ev) {
     ev.preventDefault()
-    console.log(ev);
-    
 
     if (isSignup) {
       if (!credentials.username || !credentials.password || !credentials.fullname) return
-      await signup(credentials)
+      dispatch(logInRequest(credentials))
+      navigate('/timedashboard')
     } else {
       if (!credentials.username || !credentials.password) return
-      await login(credentials)
+      dispatch(logOutRequest(credentials))
+      navigate('/timedashboard')
     }
 
     clearState()
-    navigate('/timedashboard')
   }
 
   function onUploaded(imgUrl) {
@@ -43,44 +43,69 @@ export function LoginPage() {
   }
 
   return (
-    <div>
-      <p>Please login or sign up to continue</p>
-      <form className="signup-form" onSubmit={handleSubmit}>
-        {isSignup && (
-          <input
-            type="text"
-            name="fullname"
-            value={credentials.fullname}
-            placeholder="Fullname"
-            onChange={handleChange}
-            required={isSignup}
-          />
-        )}
-        <input
-          type="text"
-          name="username"
-          value={credentials.username}
-          placeholder="Username"
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          value={credentials.password}
-          placeholder="Password"
-          onChange={handleChange}
-          required
-        />
-        {isSignup && <ImgUploader onUploaded={onUploaded} />}
-        <button>{isSignup ? `Sign Up` : `Log In`}</button>
-      </form>
-      <p>
-        {isSignup ? `Already have an account? ` : `Don’t have an account? `}
-        <button type="button" onClick={() => setIsSignup(!isSignup)} className="toggle-auth-mode">
-          {isSignup ? `Log In` : `Sign Up`}
-        </button>
-      </p>
+    <div className="login-page">
+      <div className="page-imgs"></div>
+      <div className="login-container">
+        <div className="login-content">
+          <div className="login-form-container">
+            <form className="main-login-form" onSubmit={handleSubmit}>
+              <div className="form-header">
+                <div className="sub-title">
+                  <h5>Please {isSignup ? 'sign up' : 'log in'} to continue</h5>
+                </div>
+              </div>
+
+              <div className="login-form-input-container">
+                {isSignup && (
+                  <div className="input-container">
+                    <input
+                      type="text"
+                      name="fullname"
+                      value={credentials.fullname}
+                      placeholder="Full Name"
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                )}
+                <div className="input-container">
+                  <input
+                    type="text"
+                    name="username"
+                    value={credentials.username}
+                    placeholder="Username"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="input-container">
+                  <input
+                    type="password"
+                    name="password"
+                    value={credentials.password}
+                    placeholder="Password"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                {isSignup && <ImgUploader onUploaded={onUploaded} className="img-uploader" />}
+              </div>
+
+              <button type="submit" className="login-btn">
+                <span>{isSignup ? 'Sign Up' : 'Log In'}</span>
+              </button>
+            </form>
+
+            <p>
+              {isSignup ? `Already have an account?` : `Don’t have an account?`}
+              <button type="button" onClick={() => setIsSignup(!isSignup)} className="toggle-auth-mode">
+                {isSignup ? 'Log In' : 'Sign Up'}
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

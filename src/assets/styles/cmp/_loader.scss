@@ -1,0 +1,28 @@
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: $bg-color; 
+  
+    .logo-loader {
+      width: rem(150px);
+      height: rem(150px);
+      background: url('/path/to/zentral-logo.png') no-repeat center center;
+      background-size: contain;
+      animation: bounce 1.5s infinite;
+    }
+  }
+  
+  // Bounce animation keyframes
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: translateY(-30px);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+  

@@ -1,16 +1,25 @@
-$bg-color: rgb(241, 239, 236);
-$bg-ligher-color: rgb(220, 200, 180);
-$border-color: rgb(212, 201, 190);
-$accent-color: rgb(18, 52, 88);
+$bg-color: #dbe2ef;
+$bg-ligher-color: #f9f7f7;
+$border-color: #3f72af;
+$accent-color: #112d4e;
 $text-color: rgb(3, 3, 3);
 
-$color-lightest: rgb(220, 215, 210);
-$color-lighter: #f5f5f5;
+$color-lightest: #9ec6f3;
+$color-lighter: #afddff;
 
 $color-success: #28a745;
 $color-warning: #ffc107;
 $color-danger: #dc3545;
 $color-info: #17a2b8;
+
+$input-bg: $bg-ligher-color;
+$input-border: $border-color;
+$input-focus-bg: $bg-color;
+$input-focus-border: $accent-color;
+$primary-btn-bg: $accent-color;
+$primary-btn-hover-bg: lighten($accent-color, 10%);
+$font-color: $text-color;
+$header-color: $accent-color;
 
 $breakpoint-xs: 480px;
 $breakpoint-sm: 640px;

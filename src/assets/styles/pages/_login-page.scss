@@ -1,0 +1,141 @@
+.login-page {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  inset: 0;
+  height: 100vh;
+  width: 100vw;
+  font-family: $font-base;
+  background-color: $bg-color;
+  color: $text-color;
+
+  .login-container {
+    display: flex;
+    flex: 1 1 auto;
+
+    .login-content {
+      min-width: 0;
+      position: relative;
+      z-index: 100;
+      flex: 1 1 auto;
+
+      .login-form-container {
+        min-height: calc(100vh - 100px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: $spacing-lg 0;
+
+        .main-login-form {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          background: #fff;
+          padding: $spacing-xl;
+          border-radius: $border-radius-sm;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+          width: 400px;
+          color: $font-color;
+          position: relative;
+          z-index: 50;
+
+          .form-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: $spacing-md;
+
+            .sub-title {
+              padding-top: $spacing-lg;
+
+              h5 {
+                font-weight: $font-weight-bold;
+                font-size: $font-size-md;
+                color: $header-color;
+              }
+            }
+          }
+
+          .login-form-input-container {
+            width: 100%;
+
+            .input-container {
+              margin-bottom: $spacing-sm;
+
+              input {
+                width: 100%;
+                height: 40px;
+                margin: $spacing-sm 0;
+                padding: $spacing-sm;
+                background-color: $input-bg;
+                border: 1px solid $input-border;
+                border-radius: $border-radius-sm;
+                color: $text-color;
+                transition: background-color $transition-fast, border-color $transition-fast;
+
+                &:focus {
+                  background-color: $input-focus-bg;
+                  border-color: $input-focus-border;
+                  box-shadow: inset 0 0 0 1px $input-focus-border;
+                  outline: none;
+                }
+
+                &:-webkit-autofill {
+                  box-shadow: 0 0 0px 1000px $input-bg inset !important;
+                  -webkit-box-shadow: 0 0 0px 1000px $input-bg inset !important;
+                  color: $text-color !important;
+                }
+              }
+            }
+          }
+
+          .img-uploader {
+            margin: $spacing-sm 0;
+          }
+
+          .login-btn {
+            margin-top: $spacing-md;
+            width: 100%;
+            height: 40px;
+            background-color: $primary-btn-bg;
+            color: #ffffff;
+            border: none;
+            border-radius: $border-radius-sm;
+            font-weight: $font-weight-bold;
+            cursor: pointer;
+            transition: background-color $transition-fast;
+
+            span {
+                display: flex;
+                justify-content: center;
+                justify-items: center;
+                font-weight: 500;
+              }
+
+            &:hover {
+              background-color: $primary-btn-hover-bg;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .toggle-auth-mode {
+    margin-top: $spacing-md;
+    background: none;
+    border: none;
+    color: $accent-color;
+    cursor: pointer;
+    font-weight: $font-weight-bold;
+    text-decoration: underline;
+    padding: 0;
+ 
+
+    &:hover {
+      color: darken($accent-color, 15%);
+    }
+  }
+}

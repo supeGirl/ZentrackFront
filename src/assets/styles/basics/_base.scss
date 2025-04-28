@@ -76,7 +76,7 @@ button {
   height: 2rem;
   padding: 0 0.75rem;
   margin: 0 0.25rem;
-  border-radius: rem(4px);
+  border-radius: $border-radius-md;
   transition: background-color 0.3s ease, color 0.3s ease;
   position: relative;
   font-size: $font-size-sm;

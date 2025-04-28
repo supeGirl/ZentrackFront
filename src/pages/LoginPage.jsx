@@ -3,8 +3,9 @@ import {useNavigate} from 'react-router'
 
 import {ImgUploader} from '../cmps/ImgUploader'
 import {userService} from '../services/user'
-import {logInRequest, logOutRequest} from '../store/user/user.actions'
+import {logInRequest, signupRequest} from '../store/user/user.actions'
 import {useDispatch} from 'react-redux'
+import {showErrorMsg} from '../services/event-bus.service'
 
 export function LoginPage() {
   const [credentials, setCredentials] = useState(userService.getEmptyUser())
@@ -27,12 +28,23 @@ export function LoginPage() {
 
     if (isSignup) {
       if (!credentials.username || !credentials.password || !credentials.fullname) return
-      dispatch(logInRequest(credentials))
-      navigate('/timedashboard')
+      try {
+        await dispatch(signupRequest(credentials))
+        navigate('/timedashboard')
+      } catch (err) {
+        console.error('Signup failed:', err)
+        showErrorMsg('Signup failed. Try again.')
+      }
     } else {
       if (!credentials.username || !credentials.password) return
-      dispatch(logOutRequest(credentials))
-      navigate('/timedashboard')
+      try {
+        console.log(credentials)
+        await dispatch(logInRequest(credentials))
+        navigate('/timedashboard')
+      } catch (err) {
+        console.error('Login failed:', err)
+        showErrorMsg('Login failed. Check username or password.')
+      }
     }
 
     clearState()

@@ -6,38 +6,35 @@ export const userService = {
   login,
   logout,
   signup,
-  getLoggedinUser,
-  query,
+  getloggedinUser,
+  getAllUsers,
   getById,
-  remove,
-  update,
+  deleteUser,
+  updateUser,
 }
 
-async function query() {
-  const user = await httpService.get(`user`)
-  console.log('user from q', user)
-  
-  return user
+async function getAllUsers() {
+  const users = await httpService.get('user')
+  console.log('Users from getAllUsers:', users)
+  return users
 }
 
 async function getById(userId) {
   const user = await httpService.get(`user/${userId}`)
-  
   return user
 }
 
-function remove(userId) {
+async function deleteUser(userId) {
   return httpService.delete(`user/${userId}`)
 }
 
-async function update({_id}) {
-  const user = await httpService.put(`user/${_id}`)
+async function updateUser({_id}) {
+  const updatedUser = await httpService.put(`user/${_id}`)
 
-  // When admin updates other user's details, do not update loggedinUser
-  const loggedinUser = getLoggedinUser() // Might not work because its defined in the main service???
-  if (loggedinUser._id === user._id) _saveLocalUser(user)
+  const loggedinUser = getloggedinUser()
+  if (loggedinUser?._id === updatedUser._id) _saveLocalUser(updatedUser)
 
-  return user
+  return updatedUser
 }
 
 async function login(userCred) {
@@ -46,22 +43,31 @@ async function login(userCred) {
     return _saveLocalUser(user)
   }
 }
+
 async function signup(userCred) {
-  if (!userCred.imgUrl) userCred.imgUrl = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
+  if (!userCred.imgUrl) {
+    userCred.imgUrl = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
+  }
   const user = await httpService.post('auth/signup', userCred)
   return _saveLocalUser(user)
 }
+
 async function logout() {
   sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
   return await httpService.post('auth/logout')
 }
 
-function getLoggedinUser() {
+function getloggedinUser() {
   return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
 }
 
 function _saveLocalUser(user) {
-  user = {_id: user._id, fullname: user.fullname, imgUrl: user.imgUrl, isAdmin: user.isAdmin}
+  user = {
+    _id: user._id,
+    fullname: user.fullname,
+    imgUrl: user.imgUrl,
+    isAdmin: user.isAdmin,
+  }
   sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
   return user
 }

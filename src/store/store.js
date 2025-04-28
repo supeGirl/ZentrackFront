@@ -1,23 +1,19 @@
-import { legacy_createStore as createStore, combineReducers } from 'redux'
+import { legacy_createStore as createStore, combineReducers, applyMiddleware, compose } from 'redux'
+import { thunk } from 'redux-thunk'
 import { shiftsReducer } from './shifts/shiftsReducer'
-import { userReducer } from './user/user.reducer';
-
+import { usersReducer } from './user/user.reducer'
 
 const rootReducer = combineReducers({
-  shifts: shiftsReducer, 
-  userModule: userReducer,
-
+  shifts: shiftsReducer,
+  userModule: usersReducer,
 })
 
-export const action = (type, payload) => ({
-  type,
-  payload,
-});
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
-const middleware = (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__() : undefined
-export const store = createStore(rootReducer, middleware)
-
-
+export const store = createStore(
+  rootReducer,
+  composeEnhancers(applyMiddleware(thunk))
+)
 
 // For debug:
 // store.subscribe(() => {

@@ -10,7 +10,7 @@ export const userService = {
     getById,
     remove,
     update,
-    getLoggedinUser,
+    getloggedinUser,
 }
 
 function getUsers() {
@@ -31,7 +31,7 @@ async function update({ _id, score }) {
     await storageService.put('user', user)
 
 	// When admin updates other user's details, do not update loggedinUser
-    const loggedinUser = getLoggedinUser()
+    const loggedinUser = getloggedinUser()
     if (loggedinUser._id === user._id) _saveLocalUser(user)
 
     return user
@@ -55,7 +55,7 @@ async function logout() {
     sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
 }
 
-function getLoggedinUser() {
+function getloggedinUser() {
     return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
 }
 

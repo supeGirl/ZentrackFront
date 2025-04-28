@@ -52,6 +52,8 @@ export function TimeDashboard() {
     navigate('/')
   }
   if (!user) return <h1>Loadingg</h1>
+    const {isAdmin} = user
+
   return (
     <>
       <header className="user-info-container">
@@ -96,7 +98,7 @@ export function TimeDashboard() {
         </section>
 
         <section className="user-shifts-list-container">
-          <ShiftsList shifts={shiftsState.all} />
+          <ShiftsList shifts={shiftsState.all} isAdmin={isAdmin} />
         </section>
       </main>
 

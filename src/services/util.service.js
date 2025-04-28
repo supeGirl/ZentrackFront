@@ -5,6 +5,7 @@ export const utilService = {
   debounce,
   getAssetSrc,
   formatTime,
+  formatDate,
   formatDuration,
   getLiveClockUpdater,
 }
@@ -33,6 +34,11 @@ function getLiveClockUpdater(setTimeCb) {
   }, 1000)
 }
 
+function formatDate(dateStr) {
+  const options = {year: 'numeric', month: 'long', day: 'numeric'}
+  const date = new Date(dateStr)
+  return date.toLocaleDateString('en-US', options)
+}
 function formatTime(timestamp) {
   const date = new Date(timestamp)
   return date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', second: '2-digit'})

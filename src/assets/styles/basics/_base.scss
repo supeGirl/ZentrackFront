@@ -51,6 +51,11 @@ ul {
   margin: 0;
 }
 
+th,
+td {
+  border-bottom: rem(1px) solid $border-color;
+}
+
 input {
   max-width: 100%;
   font-family: inherit;
@@ -61,7 +66,7 @@ svg {
   height: 1em;
 }
 
-button{
+button {
   border: none;
   background-color: transparent;
   cursor: pointer;
@@ -89,8 +94,6 @@ button{
   }
 
   &.primary {
-
-
     @include hover-supported {
       &:hover {
       }

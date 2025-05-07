@@ -1,12 +1,50 @@
-# React + Vite
+# ⏰ Clock Work Time App – Frontend (`zentrackfront`)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend of the Clock Work Time App — a web-based time tracking tool that allows users to start and end shifts, view their shift history, and provides admins with tools to manage and edit shift data.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🔍 Overview
 
-## Expanding the ESLint configuration
+- **Users** can:
+  - Log in securely (session is persisted)
+  - Start and end shifts
+  - View a list of their past shifts
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Admins** can:
+  - View all users and their shifts
+  - Edit any shift (via frontend modals and API)
+  - Make updates via frontend and backend APIs
+
+---
+
+## ⚙️ Tech Stack
+
+- **React 19** + **Vite**
+- **Redux Toolkit** for state management
+- **React Router v7** for navigation
+- **MUI (Material UI)** for UI components
+- **SASS** for custom styling
+- **Axios** for HTTP requests
+- **ESLint** for code quality
+
+---
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js ≥ 18
+- npm or yarn
+
+### Installation
+
+- npm install
+
+### Running the App
+
+ # Default dev server
+npm run dev
+# Use mock/local API (Windows)
+npm run dev:local 
+# For macOS/Linux
+npm run dev:local:mac 

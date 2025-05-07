@@ -28,9 +28,12 @@ export function ShiftsList({shifts, isAdmin, users = []}) {
   }
 
   if (!Array.isArray(shifts) || shifts.length === 0) return <Loader />
+  const gridRowClass = `shift-grid shift-grid--row ${isAdmin ? 'admin' : 'user'}`;
+  const gridHeaderClass = `shift-grid shift-grid--header ${isAdmin ? 'admin' : 'user'}`;
+
   return (
     <div className="shift-grid-wrapper">
-      <div className="shift-grid shift-grid--header">
+      <div className={gridHeaderClass}>
         {isAdmin && <div className="shift-grid__cell">Employees</div>}
         <div className="shift-grid__cell">Date</div>
         <div className="shift-grid__cell">Start Time</div>
@@ -47,8 +50,9 @@ export function ShiftsList({shifts, isAdmin, users = []}) {
           const endShift = utilService.formatTimeWithoutSec(endTime)
           const isEditing = _id === editShiftId
 
+
           return (
-            <div key={_id} className="shift-grid shift-grid--row">
+            <div key={_id} className={gridRowClass}>
               {isAdmin && (
                 <div className="shift-grid__cell">
                   <div className="user-cell-info">

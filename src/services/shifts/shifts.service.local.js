@@ -59,12 +59,3 @@ function deleteShift(shiftId) {
   return storageService.remove(STORAGE_KEY, shiftId)
 }
 
-// async function saveShift(newShift) {
-//   console.log('newShigt', newShift)
-
-//   return (userShift = {
-//     userId: user.id,
-//     userName: user.name,
-//     shift: newShift,
-//   })
-// }

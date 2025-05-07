@@ -19,7 +19,7 @@ const ZentrackClock = ({start}) => {
     const fetchAndStartClock = async () => {
       try {
         const raw = await shiftsService.loadTime()
-        const initialTime = new Date(raw.datetime)
+        const initialTime = new Date(raw.datetime?.datetime)        
         if (isNaN(initialTime)) throw new Error('Invalid time format')
 
         setTime(initialTime)
@@ -36,7 +36,7 @@ const ZentrackClock = ({start}) => {
     }
 
     fetchAndStartClock()
-32
+    32
     return () => clearInterval(intervalRef.current)
   }, [start])
 

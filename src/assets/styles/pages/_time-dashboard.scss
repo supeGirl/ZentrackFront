@@ -92,7 +92,7 @@
 
   &.in-action-btn {
     background-color: $color-success;
-    color: $color-lightest;
+    color:$light-txt-color;
     padding: $spacing-sm $spacing-ml;
     &:disabled {
       cursor: not-allowed;
@@ -102,7 +102,7 @@
 
   &.out-action-btn {
     background-color: $color-danger;
-    color: $color-lightest;
+    color:$light-txt-color;
     &:disabled {
       cursor: not-allowed;
       opacity: 50%;
@@ -113,20 +113,33 @@
     opacity: 0.9;
   }
 }
-.footer {
-  margin-top: $spacing-lg;
-  padding: $spacing-md;
-  border-radius: $border-radius-md;
-}
-.interval-section {
-  display: flex;
-  justify-content: center;
+@media (min-width: $breakpoint-md) {
+  .user-info-container {
+    padding: $spacing-xl;
+  }
+
+  .user-actions-container {
+    margin-inline: $spacing-xl;
+  }
+
+  .actions-btns {
+    gap: $spacing-md;
+  }
+
+  .welcoming-container {
+    font-size: $font-size-lg;
+  }
 }
 
-.time-interval {
-  font-family: $font-base;
-  font-size: $font-size-sm;
-  color: $text-color;
-  font-weight: $font-weight-normal;
-  text-align: center;
+@media (min-width: $breakpoint-lg) {
+  .user-stats {
+    gap: $spacing-xl;
+  }
+
+  .user-avater-container {
+    .user-avater {
+      padding: $spacing-sm;
+    }
+  }
+
 }

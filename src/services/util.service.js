@@ -11,23 +11,6 @@ export const utilService = {
   getLiveClockUpdater,
 }
 
-function getFaketime() {
-  return {
-    year: 2025,
-    month: 4,
-    day: 27,
-    hour: 13,
-    minute: 15,
-    seconds: 17,
-    milliSeconds: 211,
-    dateTime: '2025-04-27T13:15:17.2118289',
-    date: '04/27/2025',
-    time: '13:15',
-    timeZone: 'Europe/Berlin',
-    dayOfWeek: 'Sunday',
-    dstActive: true,
-  }
-}
 
 function getLiveClockUpdater(setTimeCb) {
   return setInterval(() => {

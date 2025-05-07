@@ -2,6 +2,7 @@
   width: 100%;
   font-family: $font-base;
   color: $font-color;
+  transition: $transition-base;
 
   .shift-grid {
     display: grid;
@@ -18,11 +19,28 @@
       font-weight: $font-weight-bold;
       position: sticky;
       top: 0;
+      &.admin {
+        grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr;
+      }
+
+      &.user {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
       z-index: 10;
     }
 
-    &--row:nth-child(even) {
-      background-color: $color-lightest;
+    &--row {
+      &.admin {
+        grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr;
+      }
+
+      &.user {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+
+      &:nth-child(even) {
+        background-color: $color-lightest;
+      }
     }
   }
 
@@ -77,6 +95,7 @@
       text-overflow: ellipsis;
       position: relative;
       top: $spacing-sm;
+      left: $spacing-sm;
     }
   }
 
@@ -87,6 +106,7 @@
     border-radius: $border-radius-sm;
     text-transform: capitalize;
     transition: background-color $transition-fast;
+    min-width: rem(50px);
 
     &:hover {
       background-color: $primary-btn-hover-bg;
@@ -110,3 +130,56 @@
   }
 }
 
+@media (min-width: $breakpoint-xs) {
+  .shift-grid-wrapper {
+    .shift-grid {
+      font-size: $font-size-md;
+      padding: $spacing-sm;
+    }
+
+    .shift-grid__cell {
+      font-size: $font-size-md;
+      padding: $spacing-sm;
+    }
+
+    .MuiButton-root {
+      min-width: rem(60px);
+    }
+  }
+}
+
+@media (min-width: $breakpoint-md) {
+  .shift-grid-wrapper {
+    .shift-grid {
+      font-size: $font-size-md;
+      padding: $spacing-sm;
+    }
+
+    .shift-grid__cell {
+      font-size: $font-size-md;
+      padding: $spacing-sm;
+    }
+
+    .MuiButton-root {
+      min-width: rem(60px);
+    }
+  }
+}
+
+@media (min-width: $breakpoint-lg) {
+  .shift-grid-wrapper {
+    width: 70%;
+    .shift-grid {
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
+
+    .shift-grid__cell {
+      .user-cell-info {
+        gap: $spacing-md;
+        .avatar-icon {
+          position: static;
+        }
+      }
+    }
+  }
+}

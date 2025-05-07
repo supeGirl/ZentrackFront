@@ -12,10 +12,12 @@ export function TimeDashboard() {
   const shiftsState = useSelector((state) => state.shifts)
   const {all: shifts, loading: shiftsLoading} = useSelector((state) => state.shifts)
   const {loggedinUser, users} = useSelector((state) => state.userModule)
+  
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const isAdmin = loggedinUser?.isAdmin
+  
 
   useEffect(() => {
     dispatch(loadUserFromSession())
@@ -54,17 +56,17 @@ export function TimeDashboard() {
         </button>
         <div className="user-avater-container">
           <span className="user-avater">
-            <Avatar src="/broken-image.jpg" />
+          <Avatar alt={loggedinUser.fullname} src={loggedinUser.imgUrl} />
           </span>
         </div>
 
         <div className="welcoming-container">{`Hello ${loggedinUser?.fullname}`}</div>
 
-        <section className="user-stats">
+        {/* <section className="user-stats">
           <div className="deficiencies">Deficiencies 0</div>
           <div className="total-time">Total 47:31</div>
           <div className="missing">Missing 0</div>
-        </section>
+        </section> */}
       </header>
 
       <main className="user-actions-container">

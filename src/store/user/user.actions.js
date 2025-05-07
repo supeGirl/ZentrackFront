@@ -1,71 +1,59 @@
 import {userService} from '../../services/user'
-import {store} from '../store.js'
-import {SET_USERS ,SET_USER, REMOVE_USER} from './user.reducer.js'
-import { LOADING_DONE, LOADING_START } from '../system/system.reducer.js'
+import {createAsyncThunk} from '@reduxjs/toolkit'
+import {SET_USERS, SET_USER, REMOVE_USER} from './user.types'
+import {getShiftsRequest} from '../shifts/shifts.action'
 
-export async function loadUsers() {
-  try {
-      store.dispatch({ type: LOADING_START })
-      const users = await userService.query()      
-      store.dispatch({ type: SET_USERS, users })
-  } catch (err) {
-      console.log('UserActions: err in loadUsers', err)
-  } finally {
-      store.dispatch({ type: LOADING_DONE })
-  }
-}
-export async function loadUser(userId) {
-  try {
-      const user = await userService.getById(userId)
-      // store.dispatch({ type: SET_WATCHED_USER, user })
-      console.log('user', user)
-      
-  } catch (err) {
-      showErrorMsg('Cannot load user')
-      console.error('Cannot load user', err)
-  }
-}
+export const getUsersRequest = createAsyncThunk(SET_USERS, async () => {
+  const response = await userService.getAllUsers()
+  return response
+})
 
-export async function removeUser(userId) {
+export const logInRequest = createAsyncThunk(SET_USER, async ({userData, navigate}, {dispatch}) => {
   try {
-      await userService.remove(userId)
-      store.dispatch({ type: REMOVE_USER, userId })
+    const user = await userService.login(userData)
+    const userId = user._id
+    if (user.isAdmin) {
+      await dispatch(getUsersRequest())
+      navigate('/timedashboard')
+    }
+    await dispatch(getShiftsRequest(userId))
+    navigate('/timedashboard')
+    return user
   } catch (err) {
-      console.error('UserActions: err in removeUser', err)
-  }
-}
-
-export async function login(credentials) {
-  try {
-    const user = await userService.login(credentials)
-    console.log('user login:', user)
-    store.dispatch({type: SET_USER, user})
-  } catch (err) {
-    console.error('user actions -> Cannot login', err)
+    console.error('Faild to loggin', err)
     throw err
   }
-}
+})
 
-export async function signup(credentials) {
+export const deleteUserRequest = createAsyncThunk(REMOVE_USER, async (id) => {
+  const response = await userService.deleteUser(id)
+  return response
+})
+
+export const logOutRequest = createAsyncThunk('user/logOut', async (_arg, {dispatch}) => {
+  await userService.logout()
+  dispatch(getShiftsRequest(null))
+  dispatch(getUsersRequest())
+  return null
+})
+
+export const signupRequest = createAsyncThunk('user/signup', async ({userData, navigate}, {dispatch}) => {
   try {
-    const user = await userService.signup(credentials)
-    
-    
-    store.dispatch({type: SET_USER, user})
-  } catch (err) {
-    console.error('user actions -> Cannot signup', err)
-    throw err
+    const user = await userService.signup(userData)
+    const userId = user._id
+    if (user.isAdmin) {
+      dispatch(getUsersRequest())
+    }
+    dispatch(getShiftsRequest(userId))
+    navigate('/timedashboard')
+    return user
+  } catch (error) {
+    console.error('Error in signup:', error)
+    throw error
   }
-}
+})
 
-export async function logout(credentials) {
-  try {
-    await userService.logout(credentials)
-    store.dispatch({type: SET_USER, user: null})
-  } catch (err) {
-    console.error('user actions -> Cannot logout', err)
-    throw err
-  }
-}
-
-
+export const loadUserFromSession = createAsyncThunk('user/loadUserFromSession', async () => {
+  const loggedInUser = userService.getloggedinUser()
+  return loggedInUser
+})

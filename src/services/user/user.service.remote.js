@@ -15,7 +15,6 @@ export const userService = {
 
 async function getAllUsers() {
   const users = await httpService.get('user')
-  console.log('Users from getAllUsers:', users)
   return users
 }
 

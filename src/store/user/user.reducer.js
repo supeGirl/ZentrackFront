@@ -1,36 +1,41 @@
+import {createSlice} from '@reduxjs/toolkit'
 import {userService} from '../../services/user'
-
-//* User
-export const SET_USERS = 'SET_USERS'
-export const SET_USER = 'SET_USER'
-export const REMOVE_USER = 'REMOVE_USER'
+import {deleteUserRequest, getUsersRequest, loadUserFromSession, logInRequest, logOutRequest} from './user.actions'
 
 const initialState = {
-  user: userService.getLoggedinUser(),
+  loggedinUser: {},
   users: [],
 }
 
-export function userReducer(state = initialState, action = {}) {
-  var newState = state
-  switch (action.type) {
-    //* User
-    case SET_USERS:
-      newState = {...state, users: action.users}
-      break
-    case SET_USER:
-      newState = {...state, user: action.user}
-      break
-    case REMOVE_USER:
-      newState = {
+const userssSlice = createSlice({
+  name: 'users',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getUsersRequest.pending, (state, action) => {})
+    builder.addCase(getUsersRequest.fulfilled, (state, action) => {
+      return {
         ...state,
-        users: state.users.filter((user) => user._id !== action.userId),
+        users: action.payload,
       }
+    })
+    builder.addCase(deleteUserRequest.pending, (state, action) => {})
+    builder.addCase(deleteUserRequest.fulfilled, (state, action) => {
+      return {
+        ...state,
+        users: state.users.filter((user) => user._id !== action.payload),
+      }
+    })
+    .addCase(logInRequest.fulfilled, (state, action) => {
+      state.loggedinUser = action.payload
+    })
+    .addCase(logOutRequest.fulfilled, (state, action) => {
+      state.loggedinUser = action.payload
+    })
+    .addCase(loadUserFromSession.fulfilled, (state, action) => {
+      state.loggedinUser = action.payload
+    })
+  },
+})
 
-    default:
-      return state
-  }
-  // For debug:
-  // window.userState = newState
-  // console.log('State:', newState)
-  return newState
-}
+export const usersReducer = userssSlice.reducer

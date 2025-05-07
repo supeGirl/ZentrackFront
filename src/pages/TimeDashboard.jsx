@@ -1,58 +1,50 @@
 import {Avatar} from '@mui/material'
-import {ZentrackClock} from '../cmps/zentreckClock'
-import {useRef, useState, useEffect} from 'react'
-import {setEndTime, setStartTime} from '../store/shifts/shifts.action'
+import {useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {shiftsService} from '../services/shifts'
+import ZentrackClock from '../cmps/ZentreckClock'
 import {ShiftsList} from '../cmps/ShiftsList'
-import {logout} from '../store/user/user.actions'
+import {getUsersRequest, loadUserFromSession, logOutRequest} from '../store/user/user.actions'
 import {useNavigate} from 'react-router'
+import {Loader} from '../cmps/Loader'
+import {getShiftsRequest, startShiftRequest, stopShiftRequest} from '../store/shifts/shifts.action'
 
 export function TimeDashboard() {
-  const [secondsPassed, setSecondsPassed] = useState(0)
-  const [isCounting, setIsCounting] = useState(false)
-  const intervalRef = useRef(null)
-  const dispatch = useDispatch()
   const shiftsState = useSelector((state) => state.shifts)
-  const user = useSelector((state) => state.userModule.user)
-  const navigate = useNavigate()
+  const {all: shifts, loading: shiftsLoading} = useSelector((state) => state.shifts)
+  const {loggedinUser, users} = useSelector((state) => state.userModule)
 
-  console.log(user, 'user')
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const isAdmin = loggedinUser?.isAdmin
 
   useEffect(() => {
-    console.log(shiftsState.currentShift)
+    dispatch(loadUserFromSession())
+  }, [])
 
-    // return () => clearInterval(intervalRef.current)
-  }, [shiftsState.all])
+  useEffect(() => {
+    if (loggedinUser?._id) {
+      dispatch(getShiftsRequest(loggedinUser._id))
+      if (isAdmin) {
+        dispatch(getUsersRequest())
+      }
+    }
+  }, [dispatch, loggedinUser, isAdmin])
 
-  async function startTimer() {
-    // if (!isCounting) {
-    //   setSecondsPassed(0)
-    //   setIsCounting(true)
-    //   intervalRef.current = setInterval(() => {
-    //     setSecondsPassed((prev) => prev + 1)
-    //   }, 1000)
-    // }
-    const time = await shiftsService.loadTime()
-
-    dispatch(setStartTime(time))
+  async function startShift() {
+    dispatch(startShiftRequest())
   }
 
-  async function stopTimer() {
-    // if (isCounting) {
-    //   clearInterval(intervalRef.current)
-    //   setIsCounting(false)
-    // }
-
-    const time = await shiftsService.loadTime()
-    dispatch(setEndTime(time))
+  async function stopShift() {
+    dispatch(stopShiftRequest())
+    dispatch(getShiftsRequest(loggedinUser._id))
   }
+
   function onLogout() {
-    logout()
+    dispatch(logOutRequest(loggedinUser.id))
     navigate('/')
   }
-  if (!user) return <h1>Loadingg</h1>
-    const {isAdmin} = user
+
+  if (!loggedinUser || shiftsLoading || (isAdmin && users.length === 0)) return <Loader />
 
   return (
     <>
@@ -66,7 +58,7 @@ export function TimeDashboard() {
           </span>
         </div>
 
-        <div className="welcoming-container">{`hello ${user.fullname}`}</div>
+        <div className="welcoming-container">{`Hello ${loggedinUser?.fullname}`}</div>
 
         <section className="user-stats">
           <div className="deficiencies">Deficiencies 0</div>
@@ -77,19 +69,19 @@ export function TimeDashboard() {
 
       <main className="user-actions-container">
         <section className="user-actions">
-          <div className="time-container">{/* <ZentrackClock /> */}</div>
+          <div className="time-container">
+            <ZentrackClock start={!!loggedinUser} />
+          </div>
 
           <div className="actions-btns">
-            <button
-              className="in-action-btn "
-              onClick={startTimer}
+            <button className="in-action-btn "
+              onClick={startShift}
               disabled={Object.keys(shiftsState.currentShift.startTime).length}
             >
               In
             </button>
-            <button
-              className="out-action-btn"
-              onClick={stopTimer}
+            <button className="out-action-btn"
+              onClick={stopShift}
               disabled={!Object.keys(shiftsState.currentShift.startTime).length}
             >
               Out
@@ -98,18 +90,9 @@ export function TimeDashboard() {
         </section>
 
         <section className="user-shifts-list-container">
-          <ShiftsList shifts={shiftsState.all} isAdmin={isAdmin} />
+          <ShiftsList shifts={shifts} isAdmin={isAdmin} users={users} />
         </section>
       </main>
-
-      {/* <footer className="footer">
-        <section className="interval-section">
-          <div className="time-interval">
-            {isCounting && <p>Working... {utilService.formatDuration(secondsPassed)}</p>}
-            {!isCounting && secondsPassed > 0 && <p>You worked {utilService.formatDuration(secondsPassed)}</p>}
-          </div>
-        </section>
-      </footer> */}
     </>
   )
 }

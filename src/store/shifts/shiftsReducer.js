@@ -1,70 +1,121 @@
-import {shiftsService} from '../../services/shifts'
-import {utilService} from '../../services/util.service'
+import {createSlice} from '@reduxjs/toolkit'
+import {
+  deleteShiftRequest,
+  getShiftsRequest,
+  loadAllShiftsRequest,
+  logClockIn,
+  saveShiftRequest,
+  startShiftRequest,
+  stopShiftRequest,
+  updateShiftRequest,
+} from './shifts.action'
+import {initialState} from './shifts.types'
 
-export const SET_START_TIME = 'SET_START_TIME'
-export const SET_END_TIME = 'SET_END_TIME'
+const shiftsSlice = createSlice({
+  name: 'shifts',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(logClockIn, (state, action) => {
+        state.currentShift.startTime = action.payload
+      })
 
-const initialState = {
-  all: [
-    {
-      _id: 'shift_1',
-      userId: 'user_101',
-      date: '2025-04-25',
-      startShift: '08:00',
-      endShift: '16:00',
-    },
-    {
-      _id: 'shift_2',
-      userId: 'user_102',
-      date: '2025-04-26',
-      startShift: '09:00',
-      endShift: '17:00',
-    },
-    {
-      _id: 'shift_3',
-      userId: 'user_103',
-      date: '2025-04-27',
-      startShift: '07:30',
-      endShift: '15:30',
-    },
-    {
-      _id: 'shift_4',
-      userId: 'user_104',
-      date: '2025-04-28',
-      startShift: '12:00',
-      endShift: '20:00',
-    },
-  ],
-  currentShift: {
-    startTime: {},
-    endTime: {},
+      .addCase(getShiftsRequest.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(getShiftsRequest.fulfilled, (state, action) => {
+        state.loading = false
+        state.all = action.payload
+      })
+      .addCase(getShiftsRequest.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.error.message
+      })
+
+      .addCase(loadAllShiftsRequest.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(loadAllShiftsRequest.fulfilled, (state, action) => {
+        state.loading = false
+        state.all = action.payload
+      })
+      .addCase(loadAllShiftsRequest.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.error.message
+      })
+
+      .addCase(startShiftRequest.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(startShiftRequest.fulfilled, (state, action) => {
+        state.loading = false
+        state.currentShift.startTime = action.payload.startTime
+      })
+      .addCase(startShiftRequest.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.error.message
+      })
+
+      .addCase(stopShiftRequest.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(stopShiftRequest.fulfilled, (state) => {
+        state.loading = false
+      })
+      .addCase(stopShiftRequest.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.error.message
+      })
+
+      .addCase(saveShiftRequest.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(saveShiftRequest.fulfilled, (state, action) => {
+        state.loading = false
+        state.all.push(action.payload)
+        state.currentShift = {startTime: {}, endTime: {}}
+      })
+      .addCase(saveShiftRequest.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.error.message
+      })
+
+      .addCase(updateShiftRequest.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(updateShiftRequest.fulfilled, (state, action) => {
+        state.loading = false
+        state.all = state.all.map((shift) => {
+          const isUpdated = shift._id === action.payload.shift._id
+
+          return isUpdated ? action.payload.shift : shift
+        })
+      })
+      .addCase(updateShiftRequest.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.error.message
+      })
+
+      .addCase(deleteShiftRequest.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(deleteShiftRequest.fulfilled, (state, action) => {
+        state.loading = false
+        state.all = state.all.filter((shift) => shift._id !== action.payload)
+      })
+      .addCase(deleteShiftRequest.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.error.message
+      })
   },
+})
 
-  isLoading: false,
-}
-
-export function shiftsReducer(state = initialState, action) {
-  const {currentShift} = state
-  switch (action.type) {
-    case SET_START_TIME:
-      console.log('action payload', action.payload)
-      console.log('action only', action)
-
-      return {...state, currentShift: {...currentShift, startTime: action.payload}}
-    case SET_END_TIME:
-      const newShift = shiftsService.createShift(currentShift.startTime, action.payload)
-      // const savedShift = shiftsService.saveShift(newShift)
-
-      return {
-        ...state,
-        all: [...state.all, newShift],
-        currentShift: {
-          user: savedShift.userName,
-          startTime: {},
-          endTime: {},
-        },
-      }
-    default:
-      return state
-  }
-}
+export const shiftsReducer = shiftsSlice.reducer

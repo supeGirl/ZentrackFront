@@ -5,6 +5,7 @@ export const utilService = {
   debounce,
   getAssetSrc,
   formatTime,
+  formatTimeWithoutSec,
   formatDate,
   formatDuration,
   getLiveClockUpdater,
@@ -42,6 +43,10 @@ function formatDate(dateStr) {
 function formatTime(timestamp) {
   const date = new Date(timestamp)
   return date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', second: '2-digit'})
+}
+function formatTimeWithoutSec(timestamp) {
+  const date = new Date(timestamp)
+  return date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
 }
 
 function formatDuration(seconds) {

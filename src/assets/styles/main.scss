@@ -1,7 +1,7 @@
 // Setup
 @import 'setup/functions';
-@import 'setup/mixins';
 @import 'setup/variables';
+@import 'setup/mixins';
 
 // Basics
 @import 'basics/helpers';
@@ -13,6 +13,5 @@
 @import 'pages/home-page';
 
 // cmp
-
 @import 'cmp/shift-list';
 @import 'cmp/loader';

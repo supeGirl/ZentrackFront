@@ -38,11 +38,11 @@ export function showErrorMsg(txt) {
 
 // Example for using the service
 eventBusService.on('some-event', (data)=>{
-    console.log('Got some-event with data:', data)
+    // console.log('Got some-event with data:', data)
 })
 eventBusService.emit('some-event', 100)
 const unsubscribe = eventBusService.on('some-event', data=>{
-    console.log('Mee too:', data)
+    // console.log('Mee too:', data)
 })
 // Just as example - unsubscribe after 2 secs
 setTimeout(()=>{

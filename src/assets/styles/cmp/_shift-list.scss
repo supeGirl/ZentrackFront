@@ -1,56 +1,112 @@
-.shift-list {
-  width: 70%;
-  border-collapse: collapse;
-  margin-top: $spacing-lg;
+.shift-grid-wrapper {
+  width: 100%;
   font-family: $font-base;
-  color: $text-color;
+  color: $font-color;
 
-  &__header {
-    background-color: $color-lightest;
-  }
+  .shift-grid {
+    display: grid;
+    width: 100%;
+    grid-auto-rows: minmax(50px, auto);
+    grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr;
+    align-items: center;
+    padding: $spacing-xs;
+    border-bottom: 1px solid $color-lighter;
+    font-size: $font-size-sm;
 
-  &__row {
-    &:nth-child(even) {
+    &--header {
+      background-color: $color-lightest;
+      font-weight: $font-weight-bold;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    &--row:nth-child(even) {
       background-color: $color-lightest;
     }
   }
 
-  &__heading,
-  &__cell {
-    padding: rem(5px);
-    text-align: center;
+  .shift-grid__body {
+    max-height: 50vh;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: $bg-color;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $color-lighter;
+      border: 1px solid $bg-color;
+      border-radius: $border-radius-md;
+    }
+
+    scrollbar-width: thin;
+    scrollbar-color: $color-lighter $bg-color;
   }
 
-  &__edit-btn {
-    padding: 6px 12px;
-    background-color: $accent-color;
-    color: $color-lighter;
-    border: none;
-    border-radius: $border-radius-md;
-    cursor: pointer;
-    font-weight: 400;
+  .shift-grid__cell {
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: $spacing-xs;
+    font-size: $font-size-sm;
+  }
 
-    &:hover {
-      background-color: #2980b9;
+  .user-cell-info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+
+    .user-cell-avatar-icon {
+      width: $spacing-lg;
+      .avatar-icon {
+        width: rem(25px);
+        height: rem(25px);
+        position: absolute;
+        top: $spacing-sm;
+        font-size: $font-size-sm;
+      }
+    }
+
+    .user-name-cell {
+      text-overflow: ellipsis;
+      position: relative;
+      top: $spacing-sm;
     }
   }
 
-  &__loading {
-    text-align: center;
-    margin-top: 50px;
-    font-size: 24px;
-    color: #555;
+  .MuiButton-root {
+    font-size: $font-size-sm;
+    background-color: $primary-btn-bg;
+    color: $light-txt-color;
+    border-radius: $border-radius-sm;
+    text-transform: capitalize;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: $primary-btn-hover-bg;
+    }
+  }
+
+  input[type='time'] {
+    background-color: $input-bg;
+    border: 1px solid $input-border;
+    padding: $spacing-xs;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-sm;
+    color: $font-color;
+    transition: border-color $transition-fast, background-color $transition-fast;
+
+    &:focus {
+      background-color: $input-focus-bg;
+      border-color: $input-focus-border;
+      outline: none;
+    }
   }
 }
 
-.user-cell-info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-
-  .user-name-cell {
-    display: flex;
-    justify-content: center;
-  }
-}

@@ -1,12 +1,20 @@
+import {storageService} from '../async-storage.service'
+import {userService} from '../user'
+import { utilService } from '../util.service'
+
 export const shiftsService = {
   loadTime,
-  saveShift
+  saveShift,
+  getShiftsByUserId,
+  saveShift,
+  updateShift,
+  deleteShift,
 }
+const STORAGE_KEY = 'shiftDB'
 
-let user = {
-  id: 'usertest',
-  name: 'user userly',
-}
+const loggedinUser = userService.getloggedinUser
+const userId = loggedinUser?._id
+const userName = loggedinUser?.fullname
 
 async function loadTime() {
   try {
@@ -22,12 +30,41 @@ async function loadTime() {
   }
 }
 
-async function saveShift(newShift) {
-  console.log('newShigt', newShift)
-  
-  return (userShift = {
-    userId: user.id,
-    userName: user.name,
-    shift: newShift,
-  })
+function getShiftsByUserId(userId) {
+  return storageService.query(STORAGE_KEY).then((shifts) => shifts.filter((shift) => shift.userId === userId))
 }
+
+function saveShift(shift) {
+  if (shift.id) {
+    return storageService.put(STORAGE_KEY, shift)
+  } else {
+    const loggedinUser = userService.getloggedinUser()
+    if (!loggedinUser) throw new Error('No logged-in user')
+
+    shift = {
+      ...shift,
+      id: utilService.makeId(),
+      userId: loggedinUser._id,
+      userName: loggedinUser.fullname,
+    }
+    return storageService.post(STORAGE_KEY, shift)
+  }
+}
+
+function updateShift(shift) {
+  return storageService.put(STORAGE_KEY, shift)
+}
+
+function deleteShift(shiftId) {
+  return storageService.remove(STORAGE_KEY, shiftId)
+}
+
+// async function saveShift(newShift) {
+//   console.log('newShigt', newShift)
+
+//   return (userShift = {
+//     userId: user.id,
+//     userName: user.name,
+//     shift: newShift,
+//   })
+// }

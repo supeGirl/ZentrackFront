@@ -19,17 +19,42 @@ function getLiveClockUpdater(setTimeCb) {
 }
 
 function formatDate(dateStr) {
-  const options = {year: 'numeric', month: 'long', day: 'numeric'}
-  const date = new Date(dateStr)
-  return date.toLocaleDateString('en-US', options)
+  let raw = typeof dateStr === 'string' ? dateStr : dateStr?.datetime;
+  if (!raw) return 'Invalid Date';
+
+  if (!/[Z+-]/.test(raw.slice(-6))) {
+    raw += 'Z';
+  }
+
+  const date = new Date(raw);
+  if (isNaN(date.getTime())) return 'Invalid Date';
+
+  const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
+  return date.toLocaleDateString('en-US', options);
 }
+
 function formatTime(timestamp) {
   const date = new Date(timestamp)
   return date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', second: '2-digit'})
 }
+
 function formatTimeWithoutSec(timestamp) {
-  const date = new Date(timestamp)
-  return date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
+  let raw = typeof timestamp === 'string' ? timestamp : timestamp?.datetime;
+  if (!raw) return 'Invalid Time';
+
+  raw = raw.replace(/(\.\d{3})\d+/, '$1');
+
+  if (!/[Z+-]/.test(raw.slice(-6))) {
+    raw += 'Z';
+  }
+
+  const date = new Date(raw);
+  if (isNaN(date.getTime())) {
+    console.error('Invalid date after sanitization:', raw);
+    return 'Invalid Time';
+  }
+
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
 function formatDuration(seconds) {

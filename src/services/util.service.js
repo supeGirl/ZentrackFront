@@ -43,12 +43,8 @@ function formatTimeWithoutSec(timestamp) {
   if (!raw) return 'Invalid Time';
 
   raw = raw.replace(/(\.\d{3})\d+/, '$1');
-
-  if (!/[Z+-]/.test(raw.slice(-6))) {
-    raw += 'Z';
-  }
-
   const date = new Date(raw);
+  
   if (isNaN(date.getTime())) {
     console.error('Invalid date after sanitization:', raw);
     return 'Invalid Time';
@@ -77,7 +73,7 @@ function makeId(length = 6) {
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min)
   max = Math.floor(max)
-  return Math.floor(Math.random() * (max - min + 1)) + min //The maximum is inclusive and the minimum is inclusive
+  return Math.floor(Math.random() * (max - min + 1)) + min 
 }
 
 function debounce(func, timeout = 300) {
